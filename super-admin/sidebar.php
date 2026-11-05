@@ -1,6 +1,7 @@
 <nav class="sidebar d-flex flex-column p-3">
-<a class="brand text-white text-decoration-none fs-5 fw-bold mb-4" href="index.php"><i class="bi bi-shield-lock"></i> Super Admin</a>
+<a class="brand text-white text-decoration-none fs-5 fw-bold mb-4" href="index.php"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 20 5.8v5.4c0 4.9-3.4 8-8 9.8C7.4 19.2 4 16.1 4 11.2V5.8Z" fill="#fff"/><path d="M12 6.2 17 8v3.1c0 3.3-2.1 5.3-5 6.6-2.9-1.3-5-3.3-5-6.6V8Z" fill="#5eead4"/></svg></span><span class="brand-text">Super Admin<span class="brand-sub">EduPro Platform</span></span></a>
 <?php foreach([['index.php','Platform','bi-speedometer2'],['tenants.php','Schools','bi-buildings'],['plans.php','Plans','bi-layers'],['subscriptions.php','Subscriptions','bi-credit-card'],['coupons.php','Coupons','bi-ticket-percent'],['tickets.php','Support Tickets','bi-life-preserver'],['announcements.php','Announcements','bi-megaphone'],['settings.php','Settings','bi-gear']] as [$f,$l,$i]): ?>
-<a class="nav-link <?= ($active??'')===$l?'active':'' ?>" href="<?= $f ?>"><i class="bi <?= $i ?>"></i> <?= $l ?></a><?php endforeach; ?>
-<div class="mt-auto small text-white-50"><?= e(current_user()['name'] ?? '') ?></div>
-<a class="nav-link" href="../auth/logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></nav>
+<a class="nav-link <?= ($active??'')===$l?'active':'' ?>" href="<?= $f ?>"><i class="bi <?= $i ?>"></i> <span class="nav-label"><?= $l ?></span></a><?php endforeach; ?>
+<?php $__nm2 = trim((string)(current_user()['name'] ?? 'S')); $__ini2 = ''; foreach (explode(' ', $__nm2) as $__p2) { if ($__p2 !== '') $__ini2 .= strtoupper($__p2[0]); if (strlen($__ini2) >= 2) break; } ?>
+<div class="mt-auto sidebar-user"><span class="avatar-circle"><?= e($__ini2) ?></span><span class="u-meta"><strong><?= e(current_user()['name'] ?? '') ?></strong><span>Super Admin</span></span></div>
+<a class="nav-link" href="../auth/logout.php"><i class="bi bi-box-arrow-right"></i> <span class="nav-label">Logout</span></a></nav>

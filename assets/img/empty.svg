@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 160" role="img" aria-label="Empty state — an open book waiting for content">
+  <ellipse cx="110" cy="140" rx="74" ry="9" fill="#0d9488" opacity=".12"/>
+  <path d="M38 118 C62 106 88 106 110 118 C132 106 158 106 182 118 L182 58 C158 47 132 47 110 58 C88 47 62 47 38 58 Z" fill="#e6f7f3" stroke="#14b8a6" stroke-width="3"/>
+  <path d="M110 58 L110 118" stroke="#14b8a6" stroke-width="3" opacity=".55"/>
+  <path d="M54 74 C70 66 86 66 98 72 M54 90 C70 82 86 82 98 88 M122 72 C134 66 150 66 166 74 M122 88 C134 82 150 82 166 90" stroke="#2563eb" stroke-width="4" stroke-linecap="round" fill="none" opacity=".4"/>
+  <path d="M168 14 l3.5 9 9 3.5 -9 3.5 -3.5 9 -3.5 -9 -9 -3.5 9 -3.5z" fill="#f59e0b"/>
+  <circle cx="44" cy="30" r="4" fill="#0ea5e9"/>
+  <circle cx="188" cy="128" r="4" fill="#14b8a6"/>
+</svg>

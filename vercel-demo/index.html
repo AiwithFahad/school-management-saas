@@ -4,15 +4,48 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-body{background:#f4f6fb} .sidebar{background:#143d2b;min-height:100vh;color:#fff} .sidebar a{color:#cfe8d8;text-decoration:none;display:block;padding:.55rem .8rem;border-radius:.5rem;margin-bottom:.2rem;cursor:pointer}
-.sidebar a.active,.sidebar a:hover{background:#1d5c3f;color:#fff} .stat{background:#fff;border-radius:1rem;padding:1rem;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-.cardx{background:#fff;border-radius:1rem;padding:1rem;box-shadow:0 2px 10px rgba(0,0,0,.05)} body.dark{background:#101418;color:#e8ecef} body.dark .stat,body.dark .cardx{background:#1b2129;color:#e8ecef}
-body.dark .table{--bs-table-bg:transparent;--bs-table-color:#e8ecef} .view{display:none}.view.on{display:block}
+:root{--teal:#0d9488;--teal2:#14b8a6;--blue:#2563eb;--sky:#0ea5e9;--grad:linear-gradient(135deg,#0d9488,#0ea5e9 55%,#2563eb);--bg:#f2f7f9;--card:#fff;--text:#0f2536;--muted:#64748b;--border:#e2ecef;--shadow:0 10px 30px rgba(13,84,110,.09)}
+*{box-sizing:border-box}html{overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.sidebar{background:linear-gradient(180deg,#0b3b4f 0%,#0d9488 135%);min-height:100vh;color:#fff;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar a{color:#d7f0ec;text-decoration:none;display:flex;align-items:center;gap:.55rem;padding:.55rem .75rem;border-radius:.65rem;margin-bottom:.2rem;cursor:pointer;transition:background .2s,transform .2s}
+.sidebar a.active,.sidebar a:hover{background:rgba(255,255,255,.18);color:#fff}
+.sidebar a:hover{transform:translateX(2px)}
+.brandmark{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.16);font-size:1.15rem}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:1.05rem;padding:1rem;box-shadow:var(--shadow);height:100%;position:relative;overflow:hidden}
+.stat::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--grad)}
+.kchip{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:13px;color:#fff;font-size:1.1rem;margin-bottom:.45rem;background:linear-gradient(135deg,#14b8a6,#0d9488);box-shadow:0 8px 16px rgba(13,148,136,.3)}
+.k1{background:linear-gradient(135deg,#38bdf8,#2563eb)}.k2{background:linear-gradient(135deg,#f59e0b,#f97316)}.k3{background:linear-gradient(135deg,#a78bfa,#7c3aed)}.k4{background:linear-gradient(135deg,#34d399,#059669)}.k5{background:linear-gradient(135deg,#fb7185,#e11d48)}
+.cardx{background:var(--card);border:1px solid var(--border);border-radius:1.05rem;padding:1rem;box-shadow:var(--shadow)}
+.hero{border-radius:1.25rem;padding:1.5rem 1.7rem;background:var(--grad);color:#fff;box-shadow:0 22px 44px rgba(13,84,110,.22);margin-bottom:1.2rem;overflow:hidden}
+.hero p{color:rgba(255,255,255,.87)}
+.hero-photo{width:100%;height:150px;object-fit:cover;border-radius:.9rem;box-shadow:0 14px 28px rgba(0,0,0,.25)}
+.photo-card{border-radius:1.05rem;overflow:hidden;border:1px solid var(--border);background:var(--card);box-shadow:var(--shadow)}
+.photo-card img{width:100%;height:130px;object-fit:cover;display:block}
+.photo-card .pc-b{padding:.7rem .9rem}
+.avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #fff,0 4px 10px rgba(13,84,110,.2)}
+.pcell{display:flex;align-items:center;gap:.6rem;font-weight:600}
+.btn{border-radius:.65rem;font-weight:600}
+.btn-success,.btn-primary{background:var(--grad)!important;border:0!important;box-shadow:0 8px 18px rgba(14,165,233,.28)}
+.form-control,.form-select{border-radius:.65rem;border-color:var(--border)}
+.form-control:focus,.form-select:focus{border-color:#14b8a6;box-shadow:0 0 0 .22rem rgba(20,184,166,.18)}
+.table{--bs-table-bg:transparent;margin-bottom:0}
+.table thead th{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--border)}
+.table td{vertical-align:middle;border-color:var(--border)}
+.badge{border-radius:999px;padding:.38em .75em}
+.report-card{border-top:4px solid var(--teal)}
+body.dark{--bg:#0a1520;--card:#10222f;--text:#e6f1f5;--muted:#93a9b8;--border:#1d3547;background:var(--bg);color:var(--text)}
+body.dark .table{--bs-table-bg:transparent;--bs-table-color:#e6f1f5}
+body.dark .form-control,body.dark .form-select{background:#0d1d2a;color:var(--text);border-color:var(--border)}
+body.dark .text-muted{color:var(--muted)!important}
+.view{display:none}.view.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media(max-width:768px){.sidebar{position:static;height:auto;min-height:0}.hero-photo{display:none}}
 </style></head><body>
-<div class="alert alert-warning text-center mb-0 py-2 small">Demo only — the full EduPro app is Core PHP 8 + MySQL on GitHub (multi-tenant, Super Admin, subscriptions). This static demo runs in your browser (localStorage).</div>
+<div class="alert alert-info text-center mb-0 py-2 small" style="background:linear-gradient(90deg,#ccfbf1,#dbeafe);border:0">Demo only — the full EduPro app is Core PHP 8 + MySQL on GitHub (multi-tenant, Super Admin, subscriptions). This static demo runs in your browser (localStorage).</div>
 <div class="container-fluid"><div class="row">
 <nav class="col-md-3 col-lg-2 sidebar p-3">
-<div class="fs-5 fw-bold mb-3"><i class="bi bi-mortarboard"></i> EduPro</div>
+<div class="fs-5 fw-bold mb-3 d-flex align-items-center gap-2"><span class="brandmark"><i class="bi bi-mortarboard"></i></span> EduPro</div>
 <a data-v="dashboard" class="active"><i class="bi bi-speedometer2"></i> Dashboard</a>
 <a data-v="students"><i class="bi bi-people"></i> Students</a>
 <a data-v="teachers"><i class="bi bi-person-badge"></i> Teachers</a>
@@ -25,10 +58,17 @@ body.dark .table{--bs-table-bg:transparent;--bs-table-color:#e8ecef} .view{displ
 </nav>
 <main class="col-md-9 col-lg-10 p-4">
 
-<section id="v-dashboard" class="view on"><h4 class="mb-3">School Dashboard — Demo School</h4>
+<section id="v-dashboard" class="view on">
+<div class="hero"><div class="row align-items-center g-3"><div class="col-lg-7"><h4 class="fw-bold mb-1">Welcome to Demo School 🎓</h4><p class="mb-0">Admissions, attendance, fees and results — a bright, premium home for your whole school community.</p></div>
+<div class="col-lg-5"><img class="hero-photo" src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=60" alt="Students learning in a bright classroom" loading="lazy" onerror="this.style.display='none'"></div></div></div>
 <div class="row g-3" id="stats"></div>
 <div class="row g-3 mt-1"><div class="col-lg-7"><div class="cardx"><h6>Monthly fee collection</h6><canvas id="feeChart" height="170"></canvas></div></div>
-<div class="col-lg-5"><div class="cardx"><h6>Recent admissions</h6><div id="recent"></div></div></div></div></section>
+<div class="col-lg-5"><div class="cardx"><h6>Recent admissions</h6><div id="recent"></div></div></div></div>
+<div class="row g-3 mt-1">
+<div class="col-md-4"><div class="photo-card"><img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=60" alt="Graduation celebration" loading="lazy" onerror="this.style.display='none'"><div class="pc-b"><strong>Graduation Day</strong><div class="small text-muted">Celebrating every milestone, from first day to farewell.</div></div></div></div>
+<div class="col-md-4"><div class="photo-card"><img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=900&q=60" alt="School library" loading="lazy" onerror="this.style.display='none'"><div class="pc-b"><strong>The Library</strong><div class="small text-muted">Thousands of books, issued and tracked in the Library module.</div></div></div></div>
+<div class="col-md-4"><div class="photo-card"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=60" alt="Education and learning" loading="lazy" onerror="this.style.display='none'"><div class="pc-b"><strong>Learning First</strong><div class="small text-muted">Exams, report cards and homework — all in one place.</div></div></div></div>
+</div></section>
 
 <section id="v-students" class="view"><h4 class="mb-3">Students</h4>
 <div class="cardx mb-3"><form id="stuForm" class="row g-2">
@@ -54,6 +94,7 @@ body.dark .table{--bs-table-bg:transparent;--bs-table-color:#e8ecef} .view{displ
 <section id="v-exams" class="view"><h4 class="mb-3">Mid-Term Exam — Report Cards (Grade 5)</h4><div id="examRows" class="row g-3"></div></section>
 
 <section id="v-library" class="view"><h4 class="mb-3">Library</h4>
+<div class="photo-card mb-3"><img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=900&q=60" alt="Library shelves full of books" loading="lazy" onerror="this.style.display='none'" style="height:150px"></div>
 <table class="table cardx"><thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Available</th><th></th></tr></thead><tbody id="bookRows"></tbody></table></section>
 
 <section id="v-plans" class="view"><h4 class="mb-3">Subscription Plans</h4><div class="row g-3" id="planRows"></div>
@@ -77,13 +118,15 @@ let db; try{ db=JSON.parse(localStorage.getItem(KEY))||structuredClone(seed);}ca
 const save=()=>localStorage.setItem(KEY,JSON.stringify(db));
 const money=n=>'$'+Number(n).toFixed(2);
 const status=f=>f.paid>=f.due?'paid':(f.paid>0?'partial':'unpaid');
+const avatar=(name,bg)=>`https://ui-avatars.com/api/?background=${bg||'random'}&color=fff&name=${encodeURIComponent(name)}`;
 function renderStats(){ const fees=db.fees.reduce((a,f)=>a+f.paid,0), pend=db.fees.reduce((a,f)=>a+(f.due-f.paid),0);
  const att=Object.values(db.attendance); const pct=att.length?Math.round(att.filter(s=>s==='present').length*100/att.length):0;
  const cards=[['Total Students',db.students.length],['Total Teachers',db.teachers.length],['Classes',3],['Attendance Today',pct+'%'],['Fees Collected',money(fees)],['Pending Fees',money(pend)]];
- document.getElementById('stats').innerHTML=cards.map(c=>`<div class="col-md-4 col-xl-2"><div class="stat"><div class="fs-4 fw-bold">${c[1]}</div><div class="text-muted small">${c[0]}</div></div></div>`).join('');
- document.getElementById('recent').innerHTML=db.students.slice(-5).reverse().map(s=>`<div class="border-bottom py-1"><strong>${s.name}</strong> <span class="text-muted small">${s.adm} · ${s.cls}</span></div>`).join(''); }
+ const icons=['bi-people','bi-person-badge','bi-door-open','bi-calendar-check','bi-cash-stack','bi-exclamation-circle'];
+ document.getElementById('stats').innerHTML=cards.map((c,i)=>`<div class="col-md-4 col-xl-2"><div class="stat"><span class="kchip k${i}"><i class="bi ${icons[i]}"></i></span><div class="fs-4 fw-bold">${c[1]}</div><div class="text-muted small">${c[0]}</div></div></div>`).join('');
+ document.getElementById('recent').innerHTML=db.students.slice(-5).reverse().map(s=>`<div class="border-bottom py-1"><span class="pcell" style="font-weight:500"><img class="avatar" loading="lazy" alt="" src="${avatar(s.name)}"><span><strong>${s.name}</strong> <span class="text-muted small">${s.adm} · ${s.cls}</span></span></span></div>`).join(''); }
 function renderStudents(){ const q=(document.getElementById('stuSearch').value||'').toLowerCase();
- document.getElementById('stuRows').innerHTML=db.students.filter(s=>s.name.toLowerCase().includes(q)||s.adm.toLowerCase().includes(q)).map(s=>`<tr><td>${s.adm}</td><td>${s.name}</td><td>${s.cls}</td><td>${s.guardian||''}</td><td><button class="btn btn-sm btn-outline-primary" onclick="editStu(${s.id})">Edit</button> <button class="btn btn-sm btn-outline-danger" onclick="delStu(${s.id})">Delete</button></td></tr>`).join(''); }
+ document.getElementById('stuRows').innerHTML=db.students.filter(s=>s.name.toLowerCase().includes(q)||s.adm.toLowerCase().includes(q)).map(s=>`<tr><td>${s.adm}</td><td><span class="pcell"><img class="avatar" loading="lazy" alt="" src="${avatar(s.name)}">${s.name}</span></td><td>${s.cls}</td><td>${s.guardian||''}</td><td><button class="btn btn-sm btn-outline-primary" onclick="editStu(${s.id})">Edit</button> <button class="btn btn-sm btn-outline-danger" onclick="delStu(${s.id})">Delete</button></td></tr>`).join(''); }
 window.editStu=id=>{ const s=db.students.find(x=>x.id===id); sId.value=s.id; sAdm.value=s.adm; sName.value=s.name; sClass.value=s.cls; sGuardian.value=s.guardian||''; };
 window.delStu=id=>{ if(confirm('Delete student?')){ db.students=db.students.filter(x=>x.id!==id); save(); renderAll(); } };
 document.getElementById('stuForm').addEventListener('submit',e=>{ e.preventDefault(); const id=+sId.value||0;
@@ -91,15 +134,15 @@ document.getElementById('stuForm').addEventListener('submit',e=>{ e.preventDefau
  if(id){ const i=db.students.findIndex(x=>x.id===id); db.students[i]=rec; } else db.students.push(rec);
  sId.value=''; e.target.reset(); save(); renderAll(); });
 document.getElementById('stuSearch').addEventListener('input',renderStudents);
-function renderTeachers(){ document.getElementById('teachRows').innerHTML=db.teachers.map(t=>`<tr><td>${t[0]}</td><td>${t[1]}</td><td>${t[2]}</td><td>${t[3]}</td><td>${money(t[4])}</td></tr>`).join(''); }
-function renderAtt(){ document.getElementById('attList').innerHTML=db.students.map(s=>`<div class="d-flex justify-content-between align-items-center border-bottom py-2"><span>${s.name} <small class="text-muted">${s.cls}</small></span><span>${['present','absent','late'].map(o=>`<label class="me-2"><input type="radio" name="att-${s.id}" value="${o}" ${db.attendance[s.id]===o?'checked':''}> ${o}</label>`).join('')}</span></div>`).join(''); attSummaryFn(); }
+function renderTeachers(){ const pics=[12,32,5,45]; document.getElementById('teachRows').innerHTML=db.teachers.map((t,i)=>`<tr><td>${t[0]}</td><td><span class="pcell"><img class="avatar" loading="lazy" alt="" src="https://i.pravatar.cc/80?img=${pics[i%pics.length]}" onerror="this.src='${avatar(t[1],'0d9488')}'">${t[1]}</span></td><td>${t[2]}</td><td>${t[3]}</td><td>${money(t[4])}</td></tr>`).join(''); }
+function renderAtt(){ document.getElementById('attList').innerHTML=db.students.map(s=>`<div class="d-flex justify-content-between align-items-center border-bottom py-2"><span class="pcell" style="font-weight:500"><img class="avatar" loading="lazy" alt="" src="${avatar(s.name)}"><span>${s.name} <small class="text-muted">${s.cls}</small></span></span><span>${['present','absent','late'].map(o=>`<label class="me-2"><input type="radio" name="att-${s.id}" value="${o}" ${db.attendance[s.id]===o?'checked':''}> ${o}</label>`).join('')}</span></div>`).join(''); attSummaryFn(); }
 function attSummaryFn(){ const v=Object.values(db.attendance); const p=v.filter(x=>x==='present').length; document.getElementById('attSummary').textContent=v.length?`${p}/${v.length} present (${Math.round(p*100/v.length)}%)`:''; }
 document.getElementById('attSave').addEventListener('click',()=>{ db.students.forEach(s=>{ const el=document.querySelector(`input[name="att-${s.id}"]:checked`); if(el) db.attendance[s.id]=el.value; }); save(); attSummaryFn(); renderStats(); alert('Attendance saved (demo).'); });
-function renderFees(){ document.getElementById('feeRows').innerHTML=db.fees.map(f=>`<tr><td>${f.student}</td><td>${f.fee}</td><td>${money(f.due)}</td><td>${money(f.paid)}</td><td><span class="badge bg-${status(f)==='paid'?'success':status(f)==='partial'?'info':'warning'}">${status(f)}</span></td><td>${status(f)!=='paid'?`<button class="btn btn-sm btn-primary" onclick="payFee(${f.id})">Pay ${money(f.due-f.paid)}</button>`:''}</td></tr>`).join(''); }
+function renderFees(){ document.getElementById('feeRows').innerHTML=db.fees.map(f=>`<tr><td><span class="pcell" style="font-weight:500"><img class="avatar" loading="lazy" alt="" src="${avatar(f.student)}">${f.student}</span></td><td>${f.fee}</td><td>${money(f.due)}</td><td>${money(f.paid)}</td><td><span class="badge bg-${status(f)==='paid'?'success':status(f)==='partial'?'info':'warning'}">${status(f)}</span></td><td>${status(f)!=='paid'?`<button class="btn btn-sm btn-primary" onclick="payFee(${f.id})">Pay ${money(f.due-f.paid)}</button>`:''}</td></tr>`).join(''); }
 window.payFee=id=>{ const f=db.fees.find(x=>x.id===id); f.paid=f.due; save(); renderAll(); };
 function grade(p){ return p>=90?'A+':p>=80?'A':p>=70?'B':p>=60?'C':p>=50?'D':'F'; }
 function renderExams(){ const subs=['Mathematics','English','Science']; const ranked=Object.entries(db.marks).map(([n,m])=>{ const t=m.reduce((a,b)=>a+b,0); return {n,m,t,pct:Math.round(t*100/300)}; }).sort((a,b)=>b.t-a.t);
- document.getElementById('examRows').innerHTML=ranked.map((r,i)=>`<div class="col-md-6"><div class="cardx"><h6>${r.n} <span class="badge bg-primary float-end">Rank #${i+1}</span></h6>${r.m.map((v,j)=>`<div class="small border-bottom py-1">${subs[j]}: <strong>${v}/100</strong></div>`).join('')}<div class="mt-2">Total <strong>${r.t}/300</strong> · <strong>${r.pct}%</strong> · Grade <strong>${grade(r.pct)}</strong></div></div></div>`).join(''); }
+ document.getElementById('examRows').innerHTML=ranked.map((r,i)=>`<div class="col-md-6"><div class="cardx report-card"><h6><span class="pcell"><img class="avatar" loading="lazy" alt="" src="${avatar(r.n)}">${r.n}</span> <span class="badge bg-primary float-end">Rank #${i+1}</span></h6>${r.m.map((v,j)=>`<div class="small border-bottom py-1">${subs[j]}: <strong>${v}/100</strong></div>`).join('')}<div class="mt-2">Total <strong>${r.t}/300</strong> · <strong>${r.pct}%</strong> · Grade <strong>${grade(r.pct)}</strong></div></div></div>`).join(''); }
 function renderBooks(){ document.getElementById('bookRows').innerHTML=db.books.map(b=>`<tr><td>${b.title}</td><td>${b.author}</td><td>${b.cat}</td><td>${b.avail}/${b.total}</td><td>${b.avail>0?`<button class="btn btn-sm btn-outline-success" onclick="issueBook(${b.id})">Issue</button>`:`<button class="btn btn-sm btn-outline-primary" onclick="returnBook(${b.id})">Return</button>`}</td></tr>`).join(''); }
 window.issueBook=id=>{ const b=db.books.find(x=>x.id===id); if(b.avail>0)b.avail--; save(); renderBooks(); };
 window.returnBook=id=>{ const b=db.books.find(x=>x.id===id); if(b.avail<b.total)b.avail++; save(); renderBooks(); };
@@ -107,7 +150,7 @@ function renderPlans(){ const plans=[['Free Trial',0,'100 students · 10 teacher
  document.getElementById('planRows').innerHTML=plans.map(p=>`<div class="col-md-3"><div class="cardx h-100 ${p[0]==='Standard'?'border border-success':''}"><h6>${p[0]}</h6><div class="fs-4 fw-bold">${money(p[1])}<small class="fs-6 text-muted">/mo</small></div><div class="small text-muted">${p[2]}</div><button class="btn btn-success btn-sm w-100 mt-2" onclick="alert('In the full PHP app this creates a subscription + payment + invoice.')">Choose plan</button></div></div>`).join(''); }
 function renderAll(){ renderStats(); renderStudents(); renderTeachers(); renderAtt(); renderFees(); renderExams(); renderBooks(); renderPlans(); }
 renderAll();
-new Chart(document.getElementById('feeChart'),{type:'bar',data:{labels:['Sep','Oct','Nov'],datasets:[{label:'Fees collected',data:[320,410,375],backgroundColor:'rgba(25,135,84,.6)'}]},options:{responsive:true}});
+new Chart(document.getElementById('feeChart'),{type:'bar',data:{labels:['Sep','Oct','Nov'],datasets:[{label:'Fees collected',data:[320,410,375],backgroundColor:['rgba(13,148,136,.7)','rgba(14,165,233,.7)','rgba(37,99,235,.7)'],borderRadius:8}]},options:{responsive:true}});
 document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',()=>{ document.querySelectorAll('.sidebar a').forEach(x=>x.classList.remove('active')); a.classList.add('active'); document.querySelectorAll('.view').forEach(v=>v.classList.remove('on')); document.getElementById('v-'+a.dataset.v).classList.add('on'); }));
 document.getElementById('themeBtn').addEventListener('click',()=>{ document.body.classList.toggle('dark'); localStorage.setItem('edu-theme',document.body.classList.contains('dark')?'dark':'light'); });
 if(localStorage.getItem('edu-theme')==='dark') document.body.classList.add('dark');
