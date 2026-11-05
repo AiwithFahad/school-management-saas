@@ -1,0 +1,9 @@
+<?php $b = $base ?? ''; $role = current_user()['role'] ?? ''; ?>
+<nav class="sidebar d-flex flex-column p-3">
+  <a class="brand text-white text-decoration-none fs-5 fw-bold mb-4" href="<?= $b ?>dashboard.php"><i class="bi bi-mortarboard"></i> EduPro</a>
+  <?php $links=[['dashboard','dashboard.php','bi-speedometer2','Dashboard'],['students','students.php','bi-people','Students'],['teachers','teachers.php','bi-person-badge','Teachers'],['classes','classes.php','bi-door-open','Classes & Subjects'],['attendance','attendance.php','bi-calendar-check','Attendance'],['fees','fees.php','bi-cash-stack','Fees'],['exams','exams.php','bi-journal-check','Exams & Results'],['timetable','timetable.php','bi-table','Timetable'],['library','library.php','bi-book','Library'],['transport','transport.php','bi-bus-front','Transport'],['homework','homework.php','bi-journal-text','Homework'],['reports','reports.php','bi-bar-chart','Reports'],['student_portal','student_portal.php','bi-person-video3','Student Portal'],['parent_portal','parent_portal.php','bi-people-fill','Parent Portal'],['subscription','subscription.php','bi-credit-card','Subscription'],['settings','settings.php','bi-gear','Settings']];
+  foreach($links as [$k,$f,$ic,$l]): if(in_array($role,['student'],true) && !in_array($k,['student_portal','dashboard'],true)) continue; if(in_array($role,['parent'],true) && !in_array($k,['parent_portal','dashboard'],true)) continue; ?>
+  <a class="nav-link <?= ($active??'')===$k?'active':'' ?>" href="<?= $b ?><?= $f ?>"><i class="bi <?= $ic ?>"></i> <?= $l ?></a><?php endforeach; ?>
+  <div class="mt-auto small text-white-50"><?= e(current_user()['name'] ?? '') ?><br><?= e(str_replace('_',' ',current_user()['role'] ?? '')) ?></div>
+  <a class="nav-link" href="<?= $b ?>auth/logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
+</nav>

@@ -1,0 +1,26 @@
+<?php require_once __DIR__ . '/includes/auth.php'; $user=require_role(['school_admin','principal','accountant','teacher']); $pdo=db(); check_tenant_active($pdo); $tid=require_tenant(); $base=''; $active='teachers'; $pageTitle='Teachers';
+
+if(is_post()){ verify_csrf();
+ if(($_POST['action']??'')==='delete'){ $pdo->prepare('DELETE FROM teachers WHERE id=? AND tenant_id=?')->execute([(int)$_POST['id'],$tid]); flash('success','Teacher deleted.'); }
+ else { if(empty($_POST['id'])){ $lim=subscription_limits($pdo); $c=$pdo->prepare('SELECT COUNT(*) FROM teachers WHERE tenant_id=?'); $c->execute([$tid]); if((int)$c->fetchColumn()>=(int)($lim['max_teachers']??10)){ flash('error','Plan teacher limit reached. Upgrade your plan.'); redirect('teachers.php'); } }
+  $d=[trim($_POST['staff_id']??''),trim($_POST['name']??''),trim($_POST['department']??''),trim($_POST['email']??''),trim($_POST['phone']??''),(float)($_POST['salary']??0),$_POST['status']??'active',(int)($_POST['user_id']?:0)?:null];
+  if(!empty($_POST['id'])) $pdo->prepare('UPDATE teachers SET staff_id=?,name=?,department=?,email=?,phone=?,salary=?,status=?,user_id=? WHERE id=? AND tenant_id=?')->execute([...$d,(int)$_POST['id'],$tid]);
+  else $pdo->prepare('INSERT INTO teachers(tenant_id,staff_id,name,department,email,phone,salary,status,user_id,created_at) VALUES(?,?,?,?,?,?,?,?,?,NOW())')->execute([$tid,...$d]);
+  if(!empty($_POST['subject_ids'])){ $tId=!empty($_POST['id'])?(int)$_POST['id']:(int)$pdo->lastInsertId(); $pdo->prepare('DELETE FROM class_subjects WHERE tenant_id=? AND teacher_id=?')->execute([$tid,$tId]); foreach((array)$_POST['subject_ids'] as $sid){ $s=$pdo->prepare('SELECT class_id FROM subjects WHERE id=? AND tenant_id=?'); $s->execute([(int)$sid,$tid]); $cl=$s->fetchColumn(); if($cl) $pdo->prepare('INSERT IGNORE INTO class_subjects(tenant_id,class_id,subject_id,teacher_id) VALUES(?,?,?,?)')->execute([$tid,$cl,(int)$sid,$tId]); } }
+  flash('success','Teacher saved.'); }
+ redirect('teachers.php'); }
+$q=trim($_GET['q']??''); $s=$pdo->prepare('SELECT t.*,GROUP_CONCAT(DISTINCT sub.name) subjects FROM teachers t LEFT JOIN class_subjects cs ON cs.teacher_id=t.id AND cs.tenant_id=t.tenant_id LEFT JOIN subjects sub ON sub.id=cs.subject_id WHERE t.tenant_id=? AND (t.name LIKE ? OR t.staff_id LIKE ? OR t.department LIKE ?) GROUP BY t.id ORDER BY t.id DESC'); $s->execute([$tid,"%$q%","%$q%","%$q%"]); $rows=$s->fetchAll();
+$subjects=$pdo->query("SELECT * FROM subjects WHERE tenant_id=$tid ORDER BY name")->fetchAll();
+$edit=null; if(!empty($_GET['edit'])){$s=$pdo->prepare('SELECT * FROM teachers WHERE id=? AND tenant_id=?');$s->execute([(int)$_GET['edit'],$tid]);$edit=$s->fetch();}
+include __DIR__ . '/includes/header.php'; ?>
+<form class="row g-2 mb-3" method="get"><div class="col-md-5"><input class="form-control" name="q" value="<?= e($q) ?>" placeholder="Search name / staff ID / department"></div><div class="col-md-2"><button class="btn btn-outline-primary w-100">Search</button></div></form>
+<div class="card p-3 mb-3"><h6><?= $edit?'Edit':'Add' ?> teacher</h6><form method="post" class="row g-2"><?= csrf_field() ?><input type="hidden" name="id" value="<?= e($edit['id']??'') ?>">
+<?php foreach([['staff_id','Staff ID'],['name','Full name'],['department','Department'],['email','Email'],['phone','Phone']] as [$f,$l]): ?><div class="col-md-3"><input class="form-control" name="<?= $f ?>" placeholder="<?= $l ?>" value="<?= e($edit[$f]??'') ?>" <?= in_array($f,['staff_id','name'])?'required':'' ?>></div><?php endforeach; ?>
+<div class="col-md-3"><input class="form-control" type="number" step="any" name="salary" placeholder="Monthly salary" value="<?= e($edit['salary']??'') ?>"></div>
+<div class="col-md-3"><select class="form-select" name="status"><?php foreach(['active','on_leave','resigned'] as $st): ?><option <?= ($edit['status']??'active')===$st?'selected':'' ?>><?= $st ?></option><?php endforeach; ?></select></div>
+<div class="col-md-6"><label class="form-label small">Subjects taught</label><select class="form-select" name="subject_ids[]" multiple size="3"><?php foreach($subjects as $sub): ?><option value="<?= $sub['id'] ?>"><?= e($sub['name']) ?> (class <?= $sub['class_id'] ?>)</option><?php endforeach; ?></select></div>
+<div class="col-md-3 d-flex align-items-end"><button class="btn btn-primary w-100"><?= $edit?'Update':'Add' ?> teacher</button></div></form></div>
+<table class="table card"><tr><th>Staff ID</th><th>Name</th><th>Department</th><th>Subjects</th><th>Contact</th><th>Salary</th><th>Status</th><th></th></tr>
+<?php foreach($rows as $r): ?><tr><td><?= e($r['staff_id']) ?></td><td><?= e($r['name']) ?></td><td><?= e($r['department']??'') ?></td><td><?= e($r['subjects']??'') ?></td><td><?= e($r['email']??'') ?><br><small><?= e($r['phone']??'') ?></small></td><td><?= money($r['salary']) ?></td><td><?= e($r['status']) ?></td>
+<td><a class="btn btn-sm btn-outline-primary" href="?edit=<?= $r['id'] ?>">Edit</a> <form method="post" class="d-inline"><?= csrf_field() ?><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= $r['id'] ?>"><button class="btn btn-sm btn-outline-danger" data-confirm="Delete teacher?">Delete</button></form></td></tr><?php endforeach; ?></table>
+<?php include __DIR__ . '/includes/footer.php'; ?>
